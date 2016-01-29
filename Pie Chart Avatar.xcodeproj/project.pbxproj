@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C3C3FBA1C5C0C0000020999 /* photo.png in Resources */ = {isa = PBXBuildFile; fileRef = 1C3C3FB91C5C0C0000020999 /* photo.png */; };
 		1C509E711C5BFCE60010FD4B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C509E701C5BFCE60010FD4B /* main.m */; };
 		1C509E741C5BFCE60010FD4B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C509E731C5BFCE60010FD4B /* AppDelegate.m */; };
 		1C509E771C5BFCE60010FD4B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C509E761C5BFCE60010FD4B /* ViewController.m */; };
@@ -15,6 +16,7 @@
 		1C509E7F1C5BFCE60010FD4B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C509E7D1C5BFCE60010FD4B /* LaunchScreen.storyboard */; };
 		1C509E8A1C5BFCE60010FD4B /* Pie_Chart_AvatarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C509E891C5BFCE60010FD4B /* Pie_Chart_AvatarTests.m */; };
 		1C509E951C5BFCE60010FD4B /* Pie_Chart_AvatarUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C509E941C5BFCE60010FD4B /* Pie_Chart_AvatarUITests.m */; };
+		1C509EA41C5BFCFE0010FD4B /* AvatarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C509EA31C5BFCFE0010FD4B /* AvatarView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1C3C3FB91C5C0C0000020999 /* photo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo.png; sourceTree = "<group>"; };
 		1C509E6C1C5BFCE60010FD4B /* Pie Chart Avatar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pie Chart Avatar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C509E701C5BFCE60010FD4B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1C509E721C5BFCE60010FD4B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -51,6 +54,8 @@
 		1C509E901C5BFCE60010FD4B /* Pie Chart AvatarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Pie Chart AvatarUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C509E941C5BFCE60010FD4B /* Pie_Chart_AvatarUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Pie_Chart_AvatarUITests.m; sourceTree = "<group>"; };
 		1C509E961C5BFCE60010FD4B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1C509EA21C5BFCFE0010FD4B /* AvatarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarView.h; sourceTree = "<group>"; };
+		1C509EA31C5BFCFE0010FD4B /* AvatarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvatarView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,7 +110,10 @@
 				1C509E731C5BFCE60010FD4B /* AppDelegate.m */,
 				1C509E751C5BFCE60010FD4B /* ViewController.h */,
 				1C509E761C5BFCE60010FD4B /* ViewController.m */,
+				1C509EA21C5BFCFE0010FD4B /* AvatarView.h */,
+				1C509EA31C5BFCFE0010FD4B /* AvatarView.m */,
 				1C509E781C5BFCE60010FD4B /* Main.storyboard */,
+				1C3C3FB91C5C0C0000020999 /* photo.png */,
 				1C509E7B1C5BFCE60010FD4B /* Assets.xcassets */,
 				1C509E7D1C5BFCE60010FD4B /* LaunchScreen.storyboard */,
 				1C509E801C5BFCE60010FD4B /* Info.plist */,
@@ -245,6 +253,7 @@
 			files = (
 				1C509E7F1C5BFCE60010FD4B /* LaunchScreen.storyboard in Resources */,
 				1C509E7C1C5BFCE60010FD4B /* Assets.xcassets in Resources */,
+				1C3C3FBA1C5C0C0000020999 /* photo.png in Resources */,
 				1C509E7A1C5BFCE60010FD4B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,6 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1C509E771C5BFCE60010FD4B /* ViewController.m in Sources */,
+				1C509EA41C5BFCFE0010FD4B /* AvatarView.m in Sources */,
 				1C509E741C5BFCE60010FD4B /* AppDelegate.m in Sources */,
 				1C509E711C5BFCE60010FD4B /* main.m in Sources */,
 			);
@@ -496,6 +506,7 @@
 				1C509E9B1C5BFCE60010FD4B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1C509E9C1C5BFCE60010FD4B /* Build configuration list for PBXNativeTarget "Pie Chart AvatarTests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +515,7 @@
 				1C509E9E1C5BFCE60010FD4B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1C509E9F1C5BFCE60010FD4B /* Build configuration list for PBXNativeTarget "Pie Chart AvatarUITests" */ = {
 			isa = XCConfigurationList;
@@ -512,6 +524,7 @@
 				1C509EA11C5BFCE60010FD4B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
