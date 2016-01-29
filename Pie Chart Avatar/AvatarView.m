@@ -60,7 +60,48 @@
         
         i++;
     }
+}
 
+
+-(void) animateToBorderValues:(NSArray *)borderValues duration:(CGFloat)duration {
+    
+    CGFloat cumulativeValue = 0;
+    for (int i = 0; i < borderValues.count; i++) {
+        CGFloat borderValue = [borderValues[i] floatValue];
+        CAShapeLayer* s = borderLayers[i];
+        
+        CGFloat v = cumulativeValue;
+        cumulativeValue += borderValue;
+        
+        [self animateLayer:s startStroke:v endStroke:cumulativeValue duration:duration];
+    }
+    
+}
+
+-(void) animateLayer:(CAShapeLayer*)shapeLayer startStroke:(CGFloat)startStoke endStroke:(CGFloat)endStroke duration:(CGFloat)duration {
+    
+    // start stroke anim
+    CABasicAnimation* strokeAnim = [CABasicAnimation animationWithKeyPath:@"strokeStart"];
+    strokeAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    strokeAnim.fromValue = @(shapeLayer.strokeStart);
+    strokeAnim.toValue = @(startStoke);
+    strokeAnim.duration = duration;
+
+    [shapeLayer addAnimation:strokeAnim forKey:@"startAnim"];
+
+    // end stroke anim
+    strokeAnim.keyPath = @"strokeEnd";
+    strokeAnim.fromValue = @(shapeLayer.strokeEnd);
+    strokeAnim.toValue = @(endStroke);
+    
+    [shapeLayer addAnimation:strokeAnim forKey:@"endAnim"];
+    
+    // update presentation layer values
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    shapeLayer.strokeStart = startStoke;
+    shapeLayer.strokeEnd = endStroke;
+    [CATransaction commit];
 }
 
 -(void) setAvatarImage:(UIImage *)avatarImage {

@@ -9,22 +9,28 @@
 #import "ViewController.h"
 #import "AvatarView.h"
 
-@implementation ViewController
+@implementation ViewController {
+    AvatarView* avatarView;
+}
 
 -(void) viewDidLoad {
     [super viewDidLoad];
     
-    AvatarView* v = [[AvatarView alloc] initWithFrame:CGRectMake(50, 50, 200, 200)];
-    v.avatarImage = [UIImage imageNamed:@"photo.png"];
-    v.borderWidth = 10;
-    v.borderColors = @[[UIColor colorWithRed:122.0/255.0 green:108.0/255.0 blue:255.0/255.0 alpha:1],
+    avatarView = [[AvatarView alloc] initWithFrame:CGRectMake(50, 50, 200, 200)];
+    avatarView.avatarImage = [UIImage imageNamed:@"photo.png"];
+    avatarView.borderWidth = 10;
+    avatarView.borderColors = @[[UIColor colorWithRed:122.0/255.0 green:108.0/255.0 blue:255.0/255.0 alpha:1],
                        [UIColor colorWithRed:100.0/255.0 green:241.0/255.0 blue:183.0/255.0 alpha:1],
                        [UIColor colorWithRed:0 green:222.0/255.0 blue:255.0/255.0 alpha:1]];
-    v.borderValues = @[@(0.4), @(0.35), @(0.25)];
+    avatarView.borderValues = @[@(0), @(0), @(0)];
     
+    [self.view addSubview:avatarView];
     
+}
+
+-(void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     
-    [self.view addSubview:v];
+    [avatarView animateToBorderValues:@[@(0.4), @(0.35), @(0.25)] duration:2];
     
 }
 

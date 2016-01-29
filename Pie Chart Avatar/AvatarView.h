@@ -23,4 +23,6 @@
 /// The width of the outer border.
 @property (nonatomic) CGFloat borderWidth;
 
+-(void) animateToBorderValues:(NSArray*)borderValues duration:(CGFloat)duration;
+
 @end
