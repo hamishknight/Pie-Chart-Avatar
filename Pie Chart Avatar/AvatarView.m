@@ -11,6 +11,7 @@
 @implementation AvatarView {
     CALayer* avatarImageLayer; // the avatar image layer
     NSMutableArray* borderLayers; // the array containing the portion border layers
+    NSArray* cumulativeBorderValues; // the array containing the cumulative border values
     UIBezierPath* borderLayerPath; // the path used to stroke the border layers
     CGFloat radius; // the radius of the view
 }
@@ -35,6 +36,8 @@
 
 -(void) populateBorderLayers {
     
+    [self calculateCumulativeValues]; // calculate cumulative values of the border values
+
     while (borderLayers.count > _borderValues.count) { // remove layers if the number of border layers got reduced
         [(CAShapeLayer*)[borderLayers lastObject] removeFromSuperlayer];
         [borderLayers removeLastObject];
@@ -69,45 +72,37 @@
 
 -(void) updateBorderStrokeValues {
     NSUInteger i = 0;
-    CGFloat cumulativeValue = 0;
     for (CAShapeLayer* s in borderLayers) {
-        
-        s.strokeStart = cumulativeValue;
-        cumulativeValue += [_borderValues[i] floatValue];
-        s.strokeEnd = cumulativeValue;
-        
+        s.strokeStart = [cumulativeBorderValues[i] floatValue];
         i++;
+        s.strokeEnd = [cumulativeBorderValues[i] floatValue];
     }
 }
 
 -(void) animateToBorderValues:(NSArray *)borderValues duration:(CGFloat)duration {
     
     _borderValues = borderValues; // update border values
-
+    
     [self populateBorderLayers]; // do a 'soft' layer update, making sure that the correct number of layers are generated pre-animation. Pre-sets stroke positions to a pre-animation state.
     
+    // define stroke animation
     CABasicAnimation* strokeAnim = [CABasicAnimation animation];
     strokeAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     strokeAnim.duration = duration;
     
-    CGFloat cumulativeValue = 0;
-    for (int i = 0; i < borderValues.count; i++) {
-        
-        cumulativeValue += [borderValues[i] floatValue];
+    for (int i = 0; i < borderLayers.count; i++) {
         
         CAShapeLayer* s = borderLayers[i];
 
-        // define stroke animation.
+        if (i != 0) [s addAnimation:strokeAnim forKey:@"startStrokeAnim"];
+        
+        // define stroke end animation
         strokeAnim.keyPath = @"strokeEnd";
         strokeAnim.fromValue = @(s.strokeEnd);
-        strokeAnim.toValue = @(cumulativeValue);
+        strokeAnim.toValue = @([cumulativeBorderValues[i+1] floatValue]);
         [s addAnimation:strokeAnim forKey:@"endStrokeAnim"];
         
-        if ((i+1) < borderValues.count) { // apply animation to next layer's stroke start (values remain the same)
-            CAShapeLayer* nextShapeLayer = borderLayers[i+1];
-            strokeAnim.keyPath = @"strokeStart"; // re-use the previous animation, as the values are the same.
-            [nextShapeLayer addAnimation:strokeAnim forKey:@"startStrokeAnim"];
-        }
+        strokeAnim.keyPath = @"strokeStart"; // re-use the previous animation, as the values are the same (in the next iteration).
     }
     
     // update presentation layer values
@@ -146,17 +141,26 @@
 -(void) setBorderColors:(NSArray *)borderColors {
     _borderColors = borderColors;
     
-    NSUInteger i = 0;
-    for (CAShapeLayer* s in borderLayers) {
-        s.strokeColor = ((UIColor*)borderColors[i]).CGColor;
-        i++;
-    }
+    // update colors
+    for (int i = 0; i < borderLayers.count; i++) ((CAShapeLayer*)borderLayers[i]).strokeColor = ((UIColor*)borderColors[i]).CGColor;
 }
 
 -(void) setBorderValues:(NSArray *)borderValues {
     _borderValues = borderValues;
     [self populateBorderLayers];
     [self updateBorderStrokeValues];
+}
+
+-(void) calculateCumulativeValues {
+    NSMutableArray* cumulativeValues = [NSMutableArray arrayWithObject:@(0.0)];
+    
+    CGFloat cumulativeValue = 0;
+    for (NSNumber* n in _borderValues) {
+        cumulativeValue += [n floatValue];
+        [cumulativeValues addObject:[NSNumber numberWithFloat:cumulativeValue]];
+    }
+    cumulativeBorderValues = [cumulativeValues copy];
+    
 }
 
 @end
