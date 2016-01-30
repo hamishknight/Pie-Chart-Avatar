@@ -60,7 +60,7 @@
             
         } else borderLayer.strokeEnd = 0.0; // default value for first layer.
         
-        [self.layer insertSublayer:borderLayer atIndex:0];
+        [self.layer insertSublayer:borderLayer atIndex:0]; // not strictly necessary, should work fine with `addSublayer`, but nice to have to ensure the layers don't unexpectedly overlap.
         [borderLayers addObject:borderLayer];
         
         borderLayerCount++;
@@ -115,7 +115,6 @@
     [CATransaction setDisableActions:YES];
     [self updateBorderStrokeValues]; // sets stroke positions.
     [CATransaction commit];
-    
 }
 
 -(void) setAvatarImage:(UIImage *)avatarImage {
