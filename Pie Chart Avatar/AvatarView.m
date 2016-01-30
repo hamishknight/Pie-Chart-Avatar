@@ -20,8 +20,10 @@
         
         radius = frame.size.width*0.5;
         
+        // create border layer array
         borderLayers = [NSMutableArray array];
         
+        // create avatar image layer
         avatarImageLayer = [CALayer layer];
         avatarImageLayer.frame = frame;
         avatarImageLayer.contentsScale = [UIScreen mainScreen].nativeScale; // scales the layer to the screen scale
@@ -50,18 +52,15 @@
         borderLayer.lineWidth = _borderWidth;
         borderLayer.strokeColor = (borderLayerCount < colorCount)? ((UIColor*)_borderColors[borderLayerCount]).CGColor : [UIColor clearColor].CGColor;
 
-        
-        if (borderLayerCount != 0) {
+        if (borderLayerCount != 0) { // set pre-animation border stroke positions.
+            
             CAShapeLayer* previousLayer = borderLayers[borderLayerCount-1];
             borderLayer.strokeStart = previousLayer.strokeEnd;
             borderLayer.strokeEnd = previousLayer.strokeEnd;
-        } else {
-            borderLayer.strokeStart = 0.0;
-            borderLayer.strokeEnd = 0.0;
-        }
+            
+        } else borderLayer.strokeEnd = 0.0; // default value for first layer.
         
-        //[self.layer insertSublayer:borderLayer atIndex:0];
-        [self.layer addSublayer:borderLayer];
+        [self.layer insertSublayer:borderLayer atIndex:0];
         [borderLayers addObject:borderLayer];
         
         borderLayerCount++;
@@ -87,31 +86,27 @@
 
     [self populateBorderLayers]; // do a 'soft' layer update, making sure that the correct number of layers are generated pre-animation. Pre-sets stroke positions to a pre-animation state.
     
-
+    CABasicAnimation* strokeAnim = [CABasicAnimation animation];
+    strokeAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    strokeAnim.duration = duration;
+    
     CGFloat cumulativeValue = 0;
     for (int i = 0; i < borderValues.count; i++) {
-        CGFloat borderValue = [borderValues[i] floatValue];
-        CAShapeLayer* s = borderLayers[i];
         
-        cumulativeValue += borderValue;
+        cumulativeValue += [borderValues[i] floatValue];
+        
+        CAShapeLayer* s = borderLayers[i];
 
-        CABasicAnimation* strokeAnim = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-        strokeAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        strokeAnim.duration = duration;
+        // define stroke animation.
+        strokeAnim.keyPath = @"strokeEnd";
         strokeAnim.fromValue = @(s.strokeEnd);
         strokeAnim.toValue = @(cumulativeValue);
         [s addAnimation:strokeAnim forKey:@"endStrokeAnim"];
         
-        if ((i+1) < borderValues.count) {
-            
+        if ((i+1) < borderValues.count) { // apply animation to next layer's stroke start (values remain the same)
             CAShapeLayer* nextShapeLayer = borderLayers[i+1];
-            strokeAnim = [CABasicAnimation animationWithKeyPath:@"strokeStart"]; // yes, I'm recreating the animaton. yes, I should've been able to re-use it. however, for some reason it's not working on the latest iOS beta (probably a bug).
-            strokeAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-            strokeAnim.duration = duration;
-            strokeAnim.fromValue = @(s.strokeEnd);
-            strokeAnim.toValue = @(cumulativeValue);
+            strokeAnim.keyPath = @"strokeStart"; // re-use the previous animation, as the values are the same.
             [nextShapeLayer addAnimation:strokeAnim forKey:@"startStrokeAnim"];
-            
         }
     }
     
@@ -143,9 +138,8 @@
     
     // update avatar masking
     CAShapeLayer* s = [CAShapeLayer layer];
-    s.path = [UIBezierPath bezierPathWithArcCenter:(CGPoint){radius-halfBorderWidth, radius-halfBorderWidth} radius:radius-borderWidth startAngle:-M_PI*0.5 endAngle:M_PI*1.5 clockwise:YES].CGPath;
-    
     avatarImageLayer.frame = CGRectMake(halfBorderWidth, halfBorderWidth, self.frame.size.width-borderWidth, self.frame.size.height-borderWidth); // update avatar image frame
+    s.path = [UIBezierPath bezierPathWithArcCenter:(CGPoint){radius-halfBorderWidth, radius-halfBorderWidth} radius:radius-borderWidth startAngle:0 endAngle:M_PI*2.0 clockwise:YES].CGPath;
     avatarImageLayer.mask = s;
     
 }

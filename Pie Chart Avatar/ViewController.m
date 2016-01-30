@@ -16,7 +16,10 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
     
-    avatarView = [[AvatarView alloc] initWithFrame:CGRectMake(50, 50, 200, 200)];
+    CGFloat size = 300;
+    
+    avatarView = [[AvatarView alloc] initWithFrame:CGRectMake(0, 0, size, size)];
+    avatarView.center = (CGPoint){self.view.frame.size.width*0.5, self.view.frame.size.height*0.5};
     avatarView.avatarImage = [UIImage imageNamed:@"photo.png"];
     avatarView.borderWidth = 10;
     avatarView.borderColors = @[[UIColor colorWithRed:122.0/255.0 green:108.0/255.0 blue:255.0/255.0 alpha:1],
