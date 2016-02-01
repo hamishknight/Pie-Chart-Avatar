@@ -50,6 +50,8 @@
 -(void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     
     [avatarView animateToBorderValues:@[@(0.1), @(0.2), @(0.3), @(0.25), @(0.15)] duration:2];
+    [avatarView animateToStrokeWidth:5 duration:2];
+
     
 }
 

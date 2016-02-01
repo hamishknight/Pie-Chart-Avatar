@@ -23,13 +23,13 @@
 /// The width of the outer border.
 @property (nonatomic) CGFloat borderWidth;
 
-/// The width of the stroke on the outer border. Automatically set when borderWidth is set, but can be changed afterwards in order to animate.
+/// The width of the stroke on the outer border. Automatically set when borderWidth is set, but can be changed afterwards in order to allow animation.
 @property (nonatomic) CGFloat borderStrokeWidth;
 
 /// Animates the border values from their current values to a new set of values.
 -(void) animateToBorderValues:(NSArray*)borderValues duration:(CGFloat)duration;
 
-
+/// Animates the stroke width from its current value to a new value.
 -(void) animateToStrokeWidth:(CGFloat)borderWidth duration:(CGFloat)duration;
 
 @end
