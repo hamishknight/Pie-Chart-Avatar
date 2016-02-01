@@ -28,6 +28,8 @@
                                 [UIColor colorWithRed:1 green:138.0/255.0 blue:0 alpha:1],
                                 [UIColor colorWithRed:1 green:0 blue:102.0/255.0 alpha:1]
                                 ];
+    avatarView.borderStrokeWidth = 0;
+    
     
     [self.view addSubview:avatarView];
     
@@ -37,7 +39,11 @@
     
     [super viewDidAppear:animated];
     
-    [avatarView animateToBorderValues:@[@(0.4), @(0.35), @(0.25)] duration:2];
+    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC);
+    dispatch_after(time, dispatch_get_main_queue(), ^{
+        [avatarView animateToBorderValues:@[@(0.4), @(0.35), @(0.25)] duration:2];
+        [avatarView animateToStrokeWidth:10 duration:2];
+    });
     
 }
 

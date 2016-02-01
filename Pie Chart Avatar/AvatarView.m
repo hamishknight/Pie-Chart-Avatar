@@ -52,7 +52,7 @@
         
         borderLayer.path = borderLayerPath.CGPath;
         borderLayer.fillColor = [UIColor clearColor].CGColor;
-        borderLayer.lineWidth = _borderWidth;
+        borderLayer.lineWidth = _borderStrokeWidth;
         borderLayer.strokeColor = (borderLayerCount < colorCount)? ((UIColor*)_borderColors[borderLayerCount]).CGColor : [UIColor clearColor].CGColor;
 
         if (borderLayerCount != 0) { // set pre-animation border stroke positions.
@@ -77,6 +77,29 @@
         i++;
         s.strokeEnd = [cumulativeBorderValues[i] floatValue];
     }
+}
+
+-(void) animateToStrokeWidth:(CGFloat)borderStrokeWidth duration:(CGFloat)duration {
+    
+    borderStrokeWidth *= 2.0; // doubles the stroke width, as internally it's double what the user expects.
+    
+    [self populateBorderLayers]; // do 'soft' layer update
+    
+    CABasicAnimation* strokeAnim = [CABasicAnimation animationWithKeyPath:@"lineWidth"];
+    strokeAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    strokeAnim.duration = duration;
+    
+    for (CAShapeLayer* s in borderLayers) {
+        strokeAnim.fromValue = @(_borderStrokeWidth);
+        strokeAnim.toValue = @(borderStrokeWidth);
+        [s addAnimation:strokeAnim forKey:@"strokeAnim"];
+    }
+    
+    // update presentation layer values
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    self.borderStrokeWidth = borderStrokeWidth;
+    [CATransaction commit];
 }
 
 -(void) animateToBorderValues:(NSArray *)borderValues duration:(CGFloat)duration {
@@ -119,15 +142,16 @@
 
 -(void) setBorderWidth:(CGFloat)borderWidth {
     _borderWidth = borderWidth;
+    _borderStrokeWidth = borderWidth*2.0;
     
     CGFloat halfBorderWidth = borderWidth*0.5; // we're gonna use this a bunch, so might as well pre-calculate
     
     // set the new border layer path
-    borderLayerPath = [UIBezierPath bezierPathWithArcCenter:(CGPoint){radius, radius} radius:radius-halfBorderWidth startAngle:-M_PI*0.5 endAngle:M_PI*1.5 clockwise:YES];
+    borderLayerPath = [UIBezierPath bezierPathWithArcCenter:(CGPoint){radius, radius} radius:radius-borderWidth startAngle:-M_PI*0.5 endAngle:M_PI*1.5 clockwise:YES];
     
     for (CAShapeLayer* s in borderLayers) { // apply the new border layer path
         s.path = borderLayerPath.CGPath;
-        s.lineWidth = borderWidth;
+        s.lineWidth = _borderStrokeWidth;
     }
     
     // update avatar masking
@@ -135,7 +159,11 @@
     avatarImageLayer.frame = CGRectMake(halfBorderWidth, halfBorderWidth, self.frame.size.width-borderWidth, self.frame.size.height-borderWidth); // update avatar image frame
     s.path = [UIBezierPath bezierPathWithArcCenter:(CGPoint){radius-halfBorderWidth, radius-halfBorderWidth} radius:radius-borderWidth startAngle:0 endAngle:M_PI*2.0 clockwise:YES].CGPath;
     avatarImageLayer.mask = s;
-    
+}
+
+-(void) setBorderStrokeWidth:(CGFloat)borderStrokeWidth {
+    _borderStrokeWidth = borderStrokeWidth;
+    for (CAShapeLayer* s in borderLayers) s.lineWidth = _borderStrokeWidth;
 }
 
 -(void) setBorderColors:(NSArray *)borderColors {
